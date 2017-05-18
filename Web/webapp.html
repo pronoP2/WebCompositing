@@ -1,0 +1,96 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<style>
+#header {
+    background-color:black;
+    color:white;
+    text-align:center;
+    padding:5px;
+}
+#section {
+    width:350px;
+    float:left;
+    padding:10px; 
+}
+#footer {
+    background-color:black;
+    color:white;
+    clear:both;
+    text-align:center;
+    padding:5px; 
+}
+body {
+        background: black;
+        color:#CCCCCC; 
+}
+div {
+    float: left;
+    border :1px solid #444444;
+    padding:10px;
+    margin: 10px;
+    background:#3B3B3B;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    var Vid1 = document.getElementById('Vid1');
+    var Vid2 = document.getElementById('Vid2');
+    var b = document.getElementById('c1');
+    var context1 = b.getContext('2d');
+    var b2 = document.getElementById('c2');
+    var context2 = b2.getContext('2d');
+     
+
+    Vid1.addEventListener('play', function(){
+      window.requestAnimationFrame(composite(Vid1, context1, context2, 540, 360));
+    },false);
+	
+    Vid2.addEventListener('play', function(){
+      window.requestAnimationFrame(draw(Vid2,context2, 540, 360));
+    },false);
+},false);
+
+function composite(v,c,bc,w,h) {
+    if(v.ended) return false;
+    c.drawImage(v,00,00,w,h);
+    var frame = c.getImageData(00,00,w,h);
+    for(var i = 0; i < frame.data.length; i++) {
+        var r = frame.data[ i ];
+        var g = frame.data[ i + 1 ];
+        var b = frame.data[ i + 2 ];
+       if (g <= 50) {
+           if (r <= 20) {
+               if (b >= 70) {
+               frame.data[i + 3] = 0; }}}}
+    bc.putImageData(frame, 0, 0);
+    window.requestAnimationFrame(function(){ composite(v,c,bc,w,h); }, 30);
+}
+
+ function draw(v,c,w,h) {
+  if(v.ended) return false;
+  c.drawImage(v,0,0,w,h);
+  c.globalCompositeOperation = "destination-atop"; 
+  window.requestAnimationFrame(function(){ draw(v,c,w,h); }, 30);
+}
+
+</script>
+
+</head>
+
+<body>
+
+<div id="header">
+<h1>Web-based Application (WAC)</h1>
+</div>
+
+<div>
+<canvas id="c1" width="540" height="360"></canvas>
+<canvas id="c2" width="540" height="360"></canvas>
+<video id="Vid1" controls loop width="540" height="360"><source src="Trex.mp4" type="video/mp4" ></source></video>
+<!--<video id="Vid1" controls loop width="540" height="360"><source src="Trex1.mp4" type="video/mp4" ></source></video>-->
+<video id="Vid2" controls loop width="540" height="360"><source src="Tracking-Field.mp4" type="video/mp4"></source></video>
+</div>
+
+</body>
+</html>
